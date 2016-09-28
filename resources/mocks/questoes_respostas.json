@@ -1,0 +1,43 @@
+{
+  "questoes": {
+    "id": 1,
+    "texto": "Questão 1",
+    "concursos": {
+      "id": 1,
+      "orgaos": {
+        "id": 1,
+        "nome": "UFPE"
+      },
+      "bancas": {
+        "id": 1,
+        "nome": "Cesgranrio"
+      },
+      "ano": 2008
+    },
+    "disciplina": {
+      "id": 1,
+      "nome": "Disciplina Teste"
+    },
+    "cargo": {
+      "id": 1,
+      "nome": "Analista de sistemas"
+    },
+    "respostas": [
+      {
+        "id": 1,
+        "enunciado": "Primeiro enunciado",
+        "correta": true
+      },
+      {
+        "id": 2,
+        "enunciado": "Segundo enunciado",
+        "correta": true
+      },
+      {
+        "id": 3,
+        "enunciado": "Terceiro enunciado",
+        "correta": false
+      }
+    ]
+  }
+}

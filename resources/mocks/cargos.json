@@ -1,0 +1,16 @@
+{
+  "cargos" : [
+    {
+      "id" : 1,
+      "nome" : "Analista Judiciário"
+    },
+    {
+      "id" : 2,
+      "nome" : "Técnico Administrativo"
+    },
+    {
+      "id" : 3,
+      "nome" : "Analista Contábil"
+    }
+  ]
+}

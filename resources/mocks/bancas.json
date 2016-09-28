@@ -1,0 +1,16 @@
+{
+  "bancas" : [
+    {
+      "id" : 1,
+      "nome" : "Cesgranrio"
+    },
+    {
+      "id" : 2,
+      "nome" : "Cespe/UNB"
+    },
+    {
+      "id" : 3,
+      "nome" : "Facepe"
+    }
+  ]
+}

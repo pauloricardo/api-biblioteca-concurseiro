@@ -1,0 +1,20 @@
+{
+  "disciplinas" : [
+    {
+      "id" : 1,
+      "nome" : "Português"
+    },
+    {
+      "id" : 2,
+      "nome" : "Matemática"
+    },
+    {
+      "id" : 3,
+      "nome" : "Direito Constitucional"
+    },
+    {
+      "id" : 4,
+      "nome" : "Disciplina Teste"
+    }
+  ]
+}
