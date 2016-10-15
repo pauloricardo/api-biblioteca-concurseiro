@@ -11,9 +11,30 @@
 |
 */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(BibliotecaConcurseiro\Entities\Cargo::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
+        'nome' => $faker->name
+    ];
+});
+$factory->define(\BibliotecaConcurseiro\Entities\Disciplina::class, function (Faker\Generator $faker) {
+    return [
+        'nome' => $faker->name
+    ];
+});
+$factory->define(BibliotecaConcurseiro\Entities\Banca::class, function (Faker\Generator $faker) {
+    return [
+        'nome' => $faker->name
+    ];
+});
+$factory->define(BibliotecaConcurseiro\Entities\Orgao::class, function (Faker\Generator $faker) {
+    return [
+        'nome' => $faker->name
+    ];
+});
+$factory->define(BibliotecaConcurseiro\Entities\Concurso::class, function (Faker\Generator $faker) {
+    return [
+        'ano' => $faker->date('Y-m-d'),
+        'orgao_id' => rand(1,100),
+        'banca_id' => rand(1,100)
     ];
 });
