@@ -21,7 +21,6 @@ class CreateQuestoesTable extends Migration
             $table->foreign('concurso_id')->references('id')->on('concursos');
             $table->foreign('disciplina_id')->references('id')->on('disciplinas');
             $table->mediumText('texto');
-            $table->string('tipo');
 
             $table->timestamps();
         });

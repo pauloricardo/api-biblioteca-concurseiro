@@ -17,7 +17,6 @@ class OrgaosController extends Controller
     protected $orgaosList;
 
     public function index($skip=null, $top=null){
-
         if(is_null($skip) && is_null($top)){
             $this->orgaosList = Orgao::all();
         }else{

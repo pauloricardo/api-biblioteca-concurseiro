@@ -12,9 +12,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-       // $this->call('CargoTableSeeder');
-       // $this->call('DisciplinaTableSeeder');
+        $this->call('CargoTableSeeder');
+        $this->call('DisciplinaTableSeeder');
         $this->call('BancaTableSeeder');
+        $this->call('OrgaoTableSeeder');
+        $this->call('ConcursoTableSeeder');
+        $this->call('QuestaoTableSeeder');
         Model::reguard();
     }
 }

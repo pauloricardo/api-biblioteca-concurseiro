@@ -17,4 +17,9 @@ class QuestaoResposta extends \BibliotecaConcurseiro\Models\AppModel
         'questao_id',
         'enunciado'
     ];
+    protected function questao()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Concurso');
+    }
+
 }

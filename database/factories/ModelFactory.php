@@ -38,3 +38,10 @@ $factory->define(BibliotecaConcurseiro\Entities\Concurso::class, function (Faker
         'banca_id' => rand(1,100)
     ];
 });
+$factory->define(BibliotecaConcurseiro\Entities\Questao::class, function (Faker\Generator $faker) {
+    return [
+        'concurso_id' => rand(1,100),
+        'disciplina_id' => rand(1,100),
+        'texto' => $faker->text('512')
+    ];
+});

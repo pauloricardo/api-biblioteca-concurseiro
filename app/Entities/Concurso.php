@@ -17,4 +17,11 @@ class Concurso extends \BibliotecaConcurseiro\Models\AppModel
     protected $fillable = [
         'ano', 'orgao_id', 'banca_id'
     ];
+
+    public function banca(){
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Banca');
+    }
+    public function orgao(){
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Orgao');
+    }
 }

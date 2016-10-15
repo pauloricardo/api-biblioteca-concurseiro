@@ -15,10 +15,12 @@ class CreateQuestoesrespostasTable extends Migration
     {
         Schema::create('questoes_respostas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('questao_id')->unsigned();;
+            $table->integer('questao_id')->unsigned();
+            $table->integer('disciplina_id')->unsigned();
             $table->foreign('questao_id')->references('id')->on('questoes');
+            $table->foreign('disciplina_id')->references('id')->on('questoes');
             $table->string('enunciado')->references('id')->on('cargos');
-
+            $table->boolean('correta');
             $table->timestamps();
         });
     }

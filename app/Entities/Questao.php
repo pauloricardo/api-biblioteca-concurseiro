@@ -20,4 +20,14 @@ class Questao extends \BibliotecaConcurseiro\Models\AppModel
         'texto',
         'tipo'
     ];
+
+    protected function concurso()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Concurso');
+    }
+    protected function disciplina()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Disciplina');
+    }
+
 }

@@ -42,13 +42,13 @@ $app->post('/api/v1/cargos/{id}', 'CargosController@update');
 $app->get('/api/v1/concursos/{skip}/{top}', 'ConcursosController@index');
 $app->get('/api/v1/concursos/', 'ConcursosController@index');
 $app->get('/api/v1/concursos/fn/trash/{id}', 'ConcursosController@deleta');
-$app->get('/api/v1/concursos/{id}', 'ConcursosController@getCargo');
+$app->get('/api/v1/concursos/{id}', 'ConcursosController@getConcurso');
 $app->post('/api/v1/concursos/', 'ConcursosController@save');
 $app->post('/api/v1/concursos/{id}', 'ConcursosController@update');
 
 $app->get('/api/v1/questoes/{skip}/{top}', 'QuestoesController@index');
 $app->get('/api/v1/questoes/', 'QuestoesController@index');
 $app->get('/api/v1/questoes/fn/trash/{id}', 'QuestoesController@deleta');
-$app->get('/api/v1/questoes/{id}', 'QuestoesController@getCargo');
+$app->get('/api/v1/questoes/{id}', 'QuestoesController@getQuestao');
 $app->post('/api/v1/questoes/', 'QuestoesController@save');
 $app->post('/api/v1/questoes/{id}', 'QuestoesController@update');
