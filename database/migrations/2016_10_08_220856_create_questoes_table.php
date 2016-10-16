@@ -15,11 +15,13 @@ class CreateQuestoesTable extends Migration
     {
         Schema::create('questoes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('concurso_id')->unsigned();;
-            $table->integer('disciplina_id')->unsigned();;
+            $table->integer('concurso_id')->unsigned();
+            $table->integer('disciplina_id')->unsigned();
+            $table->integer('cargo_id')->unsigned();
 
             $table->foreign('concurso_id')->references('id')->on('concursos');
             $table->foreign('disciplina_id')->references('id')->on('disciplinas');
+            $table->foreign('cargo_id')->references('id')->on('cargos');
             $table->mediumText('texto');
 
             $table->timestamps();

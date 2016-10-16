@@ -17,7 +17,6 @@ class ConcursosController extends Controller
     protected $concursosList;
 
     public function index($skip=null, $top=null){
-
         if(is_null($skip) && is_null($top)){
             $this->concursosList = Concurso::all();
         }else{
@@ -39,11 +38,12 @@ class ConcursosController extends Controller
                   'orgao_id' => $value->orgao_id
                 ];
             }
+            $this->concursosList = $concursos;
         }
 
         $retorno = [
           'X-Total-Rows' => count(Concurso::all()),
-          'concursos' => $concursos
+          'concursos' => $this->concursosList
         ];
 
         return response()->json($retorno);

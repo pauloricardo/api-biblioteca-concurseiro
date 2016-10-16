@@ -33,7 +33,7 @@ $factory->define(BibliotecaConcurseiro\Entities\Orgao::class, function (Faker\Ge
 });
 $factory->define(BibliotecaConcurseiro\Entities\Concurso::class, function (Faker\Generator $faker) {
     return [
-        'ano' => $faker->date('Y-m-d'),
+        'ano' => $faker->date('Y'),
         'orgao_id' => rand(1,100),
         'banca_id' => rand(1,100)
     ];
@@ -42,6 +42,7 @@ $factory->define(BibliotecaConcurseiro\Entities\Questao::class, function (Faker\
     return [
         'concurso_id' => rand(1,100),
         'disciplina_id' => rand(1,100),
+        'cargo_id' => rand(1,100),
         'texto' => $faker->text('512')
     ];
 });

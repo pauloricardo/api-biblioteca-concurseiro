@@ -17,6 +17,7 @@ class Questao extends \BibliotecaConcurseiro\Models\AppModel
     protected $fillable = [
         'concurso_id',
         'disciplina_id',
+        'cargo_id',
         'texto',
         'tipo'
     ];
@@ -28,6 +29,10 @@ class Questao extends \BibliotecaConcurseiro\Models\AppModel
     protected function disciplina()
     {
         return $this->belongsTo('BibliotecaConcurseiro\Entities\Disciplina');
+    }
+    protected function cargo()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Cargo');
     }
 
 }
