@@ -15,11 +15,13 @@ class QuestaoResposta extends \BibliotecaConcurseiro\Models\AppModel
 
     public $fillable = [
         'questao_id',
-        'enunciado'
+        'disciplina_id',
+        'enunciado',
+        'correta'
     ];
     protected function questao()
     {
-        return $this->belongsTo('BibliotecaConcurseiro\Entities\Concurso');
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Questao');
     }
 
 }

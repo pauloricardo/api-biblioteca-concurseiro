@@ -46,3 +46,11 @@ $factory->define(BibliotecaConcurseiro\Entities\Questao::class, function (Faker\
         'texto' => $faker->text('512')
     ];
 });
+$factory->define(BibliotecaConcurseiro\Entities\QuestaoResposta::class, function (Faker\Generator $faker) {
+    return [
+        'questao_id' => rand(1,100),
+        'disciplina_id' => rand(1,100),
+        'enunciado' => $faker->text('256'),
+        'correta' => $faker->boolean
+    ];
+});

@@ -12,7 +12,11 @@ class QuestaoTableSeeder extends Seeder
 {
     public function run()
     {
-        factory(\BibliotecaConcurseiro\Entities\Questao::class, 100)->create();
+        factory(\BibliotecaConcurseiro\Entities\Questao::class, 100)->create()->each(function($q){
+            for($i = 0 ; $i < 4 ; $i++){
+                factory(\BibliotecaConcurseiro\Entities\QuestaoResposta::class)->create();
+            }
+        });
 
     }
 

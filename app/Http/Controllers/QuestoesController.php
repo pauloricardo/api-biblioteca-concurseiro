@@ -8,8 +8,10 @@
 
 namespace BibliotecaConcurseiro\Http\Controllers;
 
-use BibliotecaConcurseiro\Entities\questao;
+use BibliotecaConcurseiro\Entities\Questao;
+use BibliotecaConcurseiro\Entities\QuestaoResposta;
 use BibliotecaConcurseiro\Http\Controllers\Controller;
+use BibliotecaConcurseiro\Factories\QuestaoFactory;
 use Illuminate\Http\Request;
 
 
@@ -21,39 +23,10 @@ class QuestoesController extends Controller
     {
 
         if (is_null($skip) && is_null($top)) {
-            $this->questoesList = Questao::all();
+            $this->questoesList = QuestaoFactory::convertQuestaoList(Questao::all());
         } else {
-            $this->questoesList = Questao::limit($top)->offset($skip)->orderBy('id', 'DESC')->get();
-            foreach ($this->questoesList as $key => $value) {
-
-                $questoes[] = [
-                    'id' => $value->id,
-                    'texto' => $value->texto,
-                    'concurso' => [
-                        'id' => $value->concurso_id,
-                        'ano' => $value->concurso->ano,
-                        'orgao' => [
-                            'id' => $value->concurso->orgao->id,
-                            'nome' => $value->concurso->orgao->nome
-                        ]
-                    ],
-                    'disciplina' => [
-                        'id' => $value->disciplina_id,
-                        'nome' => $value->disciplina->nome
-
-                    ],
-                    'cargo' => [
-                        'id' => $value->cargo_id,
-                        'nome' => $value->cargo->nome
-                    ],
-                    'concurso_id' => $value->concurso_id,
-                    'disciplina_id' => $value->disciplina_id,
-                    'cargo_id' => $value->cargo_id
-                ];
-            }
-            $this->questoesList = $questoes;
+            $this->questoesList = QuestaoFactory::convertQuestaoList(Questao::limit($top)->offset($skip)->orderBy('id', 'DESC')->get());
         }
-
         $retorno = [
             'X-Total-Rows' => count(Questao::all()),
             'questoes' => $this->questoesList
@@ -64,8 +37,8 @@ class QuestoesController extends Controller
 
     public function getQuestao($id)
     {
-        $questao = Questao::find($id);
 
+        $questao = QuestaoFactory::convertQuestaoToArray(Questao::find($id));
         return response()->json($questao);
     }
 
@@ -73,13 +46,7 @@ class QuestoesController extends Controller
     {
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
-        $data = [
-            'id' => $value->id,
-            'texto' => $value->texto,
-            'concurso_id' => $value->concurso_id,
-            'disciplina_id' => $value->disciplina_id,
-            'cargo_id' => $value->cargo_id
-        ];
+        $data = QuestaoFactory::convertQuestaoToArray($data);
 
         $questao = Questao::create($data);
 
@@ -101,13 +68,32 @@ class QuestoesController extends Controller
         $questao = Questao::find($id);
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
+        $data = QuestaoFactory::convertQuestaoToArray($data);
 
-        $questao->texto = $data->texto;
-        $questao->concurso_id = $data->concurso_id;
-        $questao->disciplina_id = $data->disciplina_id;
-        $questao->cargo_id = $data->cargo_id;
-        $questao->save();
+        $questao->texto = $data['texto'];
+        $questao->concurso_id = $data['concurso_id'];
+        $questao->disciplina_id = $data['disciplina_id'];
+        $questao->cargo_id = $data['cargo_id'];
+        //$questao->questoesresposta = $data['respostas'];
 
+
+
+        $saveQuestao = $questao->save();
+            foreach($data['respostas'] as $key => $value){
+                $questaoresposta = QuestaoResposta::find($value['id']);
+
+                if($questaoresposta){
+                    $questaoresposta->enunciado = $value['enunciado'];
+                    $questaoresposta->correta = $value['correta'];
+                    $questaoresposta->questao_id = $value['questao_id'];
+                    $questaoresposta->disciplina_id = 100;
+                    $questaoresposta->save();
+                }else{
+                    $value['disciplina_id'] = 100;
+                    $q = QuestaoResposta::create($value);
+                }
+            }
+            $questao->questoesresposta()->save($data['respostas']);
         return response()->json($questao);
     }
 }
