@@ -18,10 +18,12 @@ class CreateQuestoesTable extends Migration
             $table->integer('concurso_id')->unsigned();
             $table->integer('disciplina_id')->unsigned();
             $table->integer('cargo_id')->unsigned();
-
+            $table->boolean('multipla_escolha');
+            $table->integer('tipo_questao');
             $table->foreign('concurso_id')->references('id')->on('concursos');
             $table->foreign('disciplina_id')->references('id')->on('disciplinas');
             $table->foreign('cargo_id')->references('id')->on('cargos');
+
             $table->mediumText('texto');
 
             $table->timestamps();

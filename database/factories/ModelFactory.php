@@ -43,6 +43,8 @@ $factory->define(BibliotecaConcurseiro\Entities\Questao::class, function (Faker\
         'concurso_id' => rand(1,100),
         'disciplina_id' => rand(1,100),
         'cargo_id' => rand(1,100),
+        'multipla_escolha' => $faker->boolean(),
+        'tipo_questao' => rand(1,2),
         'texto' => $faker->text('512')
     ];
 });

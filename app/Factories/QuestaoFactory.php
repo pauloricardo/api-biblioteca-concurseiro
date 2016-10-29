@@ -17,17 +17,20 @@ class QuestaoFactory
         $converted = [];
         if ($questao) {
             $converted = [
-                'id' => $questao->id,
+                'id' => isset($questao->id) ? $questao->id : "",
                 'disciplina_id' => $questao->disciplina_id,
                 'cargo_id' => $questao->cargo_id,
                 'concurso_id' => $questao->concurso_id,
+                'multipla_escolha' => $questao->multipla_escolha,
+                'tipo_questao' => $questao->tipo_questao,
                 'texto' => $questao->texto
             ];
             if ($questao->questoesresposta) {
                 foreach ($questao->questoesresposta as $key => $value) {
+
                     $converted['respostas'][] = [
                         'id' => is_object($value) && isset($value->id) ? $value->id : "",
-                        'questao_id' => is_object($value) ? $value->questao_id : $value['questao_id'],
+                        'questao_id' => isset($value->questao_id) ? $value->questao_id : "",
                         'enunciado' => is_object($value) ? $value->enunciado : $value['enunciado'],
                         'correta' => is_object($value) ? $value->correta : $value['correta']
                     ];
@@ -52,7 +55,7 @@ class QuestaoFactory
             if ($questao->questoesresposta) {
                 foreach ($questao->questoesresposta as $key => $value) {
                     $converted['respostas'][] = [
-                        'id' => is_object($value) && $value->id ? $value->id : "",
+                        'id' => isset($value->id)  ? $value->id : "",
                         'disciplina_id' => $value->disciplina_id,
                         'questao_id' => $value->questao_id,
                         'enunciado' => $value->enunciado,
@@ -71,12 +74,14 @@ class QuestaoFactory
             foreach ($questaoList as $key => $value) {
                 $converted[] = [
                     'id' => $value->id,
-                    'texto' => $value->texto,
+                    'texto' => strip_tags(nl2br($value->texto)),
                     'concurso' => ConcursoFactory::convert($value->concurso),
                     'disciplina' => DisciplinaFactory::convert($value->disciplina),
                     'cargo' => CargoFactory::convert($value->cargo),
                     'concurso_id' => $value->concurso_id,
                     'disciplina_id' => $value->disciplina_id,
+                    'multipla_escolha' => $value->multipla_escolha,
+                    'tipo_questao' => $value->tipo_questao,
                     'cargo_id' => $value->cargo_id,
                 ];
             }

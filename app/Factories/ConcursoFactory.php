@@ -17,10 +17,14 @@ class ConcursoFactory
             $converted = [
                 'id' => $concurso->id,
                 'ano' => $concurso->ano,
-                'orgao' => $concurso->orgao ? OrgaoFactory::convert($concurso->orgao) : ""
+                'orgao' => $concurso->orgao ? OrgaoFactory::convert($concurso->orgao) : "",
+                'banca' => $concurso->orgao ? BancaFactory::convert($concurso->banca) : ""
             ];
             if($converted['orgao'] === ''){
                 unset($converted['orgao']);
+            }
+            if($converted['banca'] === ''){
+                unset($converted['banca']);
             }
         }
         return $converted;
@@ -34,7 +38,8 @@ class ConcursoFactory
                 $converted[] = [
                     'id' => $value->id,
                     'ano' => $value->ano,
-                    'orgao' => OrgaoFactory::convert($value->orgao)
+                    'orgao' => OrgaoFactory::convert($value->orgao),
+                    'banca' => BancaFactory::convert($value->banca)
                 ];
             }
         }

@@ -46,9 +46,11 @@ $app->get('/api/v1/concursos/{id}', 'ConcursosController@getConcurso');
 $app->post('/api/v1/concursos/', 'ConcursosController@save');
 $app->post('/api/v1/concursos/{id}', 'ConcursosController@update');
 
-$app->get('/api/v1/questoes/{skip}/{top}', 'QuestoesController@index');
+$app->get('/api/v1/questoes/{skip}/{top}/', 'QuestoesController@index');
+$app->get('/api/v1/questoes/{filtroDisciplina}/{filtroConcurso}/{skip}/{top}/', 'QuestoesController@index');
 $app->get('/api/v1/questoes/', 'QuestoesController@index');
-$app->get('/api/v1/questoes/fn/trash/{id}', 'QuestoesController@deleta');
+$app->get('/api/v1/questoes/fn/trash/{id}', 'QuestoesController@trash');
 $app->get('/api/v1/questoes/{id}', 'QuestoesController@getQuestao');
 $app->post('/api/v1/questoes/', 'QuestoesController@save');
+$app->post('/api/v1/questoes/uploadQuestaoFile', 'QuestoesController@uploadQuestaoFile');
 $app->post('/api/v1/questoes/{id}', 'QuestoesController@update');
