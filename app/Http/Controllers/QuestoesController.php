@@ -35,42 +35,37 @@ class QuestoesController extends Controller
     {
         $data = array();
         $data = $request->all();
+        $where = [];
+        $countQuestoes = 0;
+        if(isset($data['filtroConcurso'])){
+            $where = ['concurso_id'=>$data['filtroConcurso']];
+        }
+        if(isset($data['filtroDisciplina'])){
+            $where = ['disciplina_id'=>$data['filtroDisciplina']];
+        }
+        if(isset($data['filtroTipoQuestao'])){
+            $where = ['tipo_questao' => $data['filtroTipoQuestao']];
+        }
+        if(isset($data['filtroMultiplaEscolha'])){
+            $where = ['multipla_escolha'=>$data['filtroMultiplaEscolha']];
+        }
+
         if (!isset($data['skip']) && !isset($data['top'])) {
             $this->questoesList = QuestaoFactory::convertQuestaoList(Questao::all());
-        } else if (isset($data['skip']) && isset($data['top']) &&
-            isset($data['filtroConcurso'])) {
+            $countQuestoes = count($this->questoesList);
+        } else if(isset($data['skip']) && isset($data['top']) && count($where) > 0){
             $this->questoesList = QuestaoFactory::convertQuestaoList(
-                Questao::where('concurso_id', $data['filtroConcurso'])->limit($data['top'])->offset($data['skip'])->orderBy('id', 'DESC')->get()
+                Questao::where($where)->limit($data['top'])->offset($data['skip'])->orderBy('id', 'DESC')->get()
             );
-
-        } else if (isset($data['skip']) && isset($data['top']) && isset($data['filtroDisciplina'])) {
-
-            $this->questoesList = QuestaoFactory::convertQuestaoList(
-                Questao::where('disciplina_id', $data['filtroDisciplina'])
-                    ->limit($data['top'])->offset($data['skip'])->orderBy('id', 'DESC')->get()
-            );
-
-        } else if (isset($data['skip']) && isset($data['top']) && isset($data['filtroConcurso']) && isset($data['filtroDisciplina'])) {
-            $this->questoesList = QuestaoFactory::convertQuestaoList(
-                Questao::where([
-                    ['concurso_id', $data['filtroConcurso']],
-                    ['disciplina_id', $data['filtroDisciplina']]
-                ])->limit($data['top'])->offset($data['skip'])->orderBy('id', 'DESC')->get()
-            );
-        } else if (!isset($data['skip']) && !isset($data['top']) && isset($data['filtroConcurso']) && isset($data['filtroDisciplina'])) {
-            $this->questoesList = QuestaoFactory::convertQuestaoList(
-                Questao::where([
-                    ['concurso_id', $data['filtroConcurso']],
-                    ['disciplina_id', $data['filtroDisciplina']]
-                ])->orderBy('id', 'DESC')->get()
-            );
-        } else {
+            $countQuestoes = count($this->questoesList);
+        }else{
             $this->questoesList = QuestaoFactory::convertQuestaoList(
                 Questao::limit($data['top'])->offset($data['skip'])->orderBy('id', 'DESC')->get()
             );
+            $countQuestoes = count(Questao::all());
         }
         $retorno = [
-            'X-Total-Rows' => count(Questao::all()),
+            'X-Total-Rows' => $countQuestoes,
             'questoes' => $this->questoesList
         ];
 
@@ -126,31 +121,12 @@ class QuestoesController extends Controller
         $questao = Questao::find($id);
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
-        $data = QuestaoFactory::convertQuestaoToArray($data);
-
-        $questao->texto = $data['texto'];
-        $questao->concurso_id = $data['concurso_id'];
-        $questao->disciplina_id = $data['disciplina_id'];
-        $questao->multipla_escolha = $data['multipla_escolha'];
-        $questao->tipo_questao = $data['tipo_questao'];
-        $questao->cargo_id = $data['cargo_id'];
-        //$questao->questoesresposta = $data['respostas'];
-
-
+        QuestaoFactory::convertQuestaoToUpdate($questao, $data);
         $saveQuestao = $questao->save();
         foreach ($data['respostas'] as $key => $value) {
             $questaoresposta = QuestaoResposta::find($value['id']);
-
-            if ($questaoresposta) {
-                $questaoresposta->enunciado = $value['enunciado'];
-                $questaoresposta->correta = $value['correta'];
-                $questaoresposta->questao_id = $value['questao_id'];
-                $questaoresposta->disciplina_id = 100;
-                $questaoresposta->save();
-            } else {
-                $value['disciplina_id'] = 100;
-                $q = QuestaoResposta::create($value);
-            }
+            QuestaoFactory::convertQuestaoRespostaToUpdate($questaoresposta, $value);
+            $questaoresposta->save();
         }
         return response()->json($questao);
     }

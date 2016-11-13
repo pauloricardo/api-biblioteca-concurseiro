@@ -19,6 +19,7 @@ $app->post('/api/v1/disciplinas/', 'DisciplinasController@save');
 $app->post('/api/v1/disciplinas/{id}', 'DisciplinasController@update');
 
 $app->get('/api/v1/bancas/{skip}/{top}', 'BancasController@index');
+
 $app->get('/api/v1/bancas/', 'BancasController@index');
 $app->get('/api/v1/bancas/fn/trash/{id}', 'BancasController@deleta');
 $app->get('/api/v1/bancas/{id}', 'BancasController@getBanca');
@@ -54,3 +55,11 @@ $app->get('/api/v1/questoes/{id}', 'QuestoesController@getQuestao');
 $app->post('/api/v1/questoes/', 'QuestoesController@save');
 $app->post('/api/v1/questoes/uploadQuestaoFile', 'QuestoesController@uploadQuestaoFile');
 $app->post('/api/v1/questoes/{id}', 'QuestoesController@update');
+
+/** ROTAS PÚBLICAS**/
+$app->get('/api/v1/public/bancas', 'QuestoesPublicController@getBancas');
+$app->get('/api/v1/public/cargos', 'QuestoesPublicController@getCargos');
+$app->get('/api/v1/public/concursos', 'QuestoesPublicController@getConcursos');
+$app->get('/api/v1/public/disciplinas', 'QuestoesPublicController@getDisciplinas');
+$app->get('/api/v1/public/questoes', 'QuestoesPublicController@getQuestoes');
+/** FIM 8*/

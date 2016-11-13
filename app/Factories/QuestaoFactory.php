@@ -88,4 +88,22 @@ class QuestaoFactory
         }
         return $converted;
     }
+    public static function convertQuestaoToUpdate($object, $array){
+        if(isset($object) && isset($array)){
+            $object->texto = $array['texto'];
+            $object->concurso_id = $array['concurso_id'];
+            $object->disciplina_id = $array['disciplina_id'];
+            $object->multipla_escolha = $array['multipla_escolha'];
+            $object->tipo_questao = $array['tipo_questao'];
+            $object->cargo_id = $array['cargo_id'];
+
+        }
+    }
+    public static function convertQuestaoRespostaToUpdate($object, $array){
+        if(isset($object) && isset($array)){
+            $object->enunciado = $array['enunciado'];
+            $object->correta = $array['correta'];
+            $object->questao_id = $array['questao_id'];
+        }
+    }
 }

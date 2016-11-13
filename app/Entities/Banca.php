@@ -16,4 +16,9 @@ class Banca extends \BibliotecaConcurseiro\Models\AppModel
     protected $fillable = [
         'nome'
     ];
+
+    protected function concursos()
+    {
+        return $this->hasMany('BibliotecaConcurseiro\Entities\Concurso');
+    }
 }

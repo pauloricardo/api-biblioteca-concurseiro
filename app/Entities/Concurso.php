@@ -24,4 +24,7 @@ class Concurso extends \BibliotecaConcurseiro\Models\AppModel
     public function orgao(){
         return $this->belongsTo('BibliotecaConcurseiro\Entities\Orgao');
     }
+    public function questoes(){
+        return $this->hasMany('BibliotecaConcurseiro\Entities\Questao');
+    }
 }
