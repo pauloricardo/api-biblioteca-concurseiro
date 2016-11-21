@@ -15,12 +15,12 @@ class CreateProvasTable extends Migration
     {
         Schema::create('provas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('concurso_id')->unsigned();;
-            $table->integer('cargo_id')->unsigned();;
+            $table->integer('concurso_id')->unsigned();
+            $table->integer('cargo_id')->unsigned();
 
             $table->foreign('concurso_id')->references('id')->on('concursos');
             $table->foreign('cargo_id')->references('id')->on('cargos');
-            $table->string('nivel');
+            $table->string('nome');
             $table->timestamps();
         });
     }

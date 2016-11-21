@@ -16,7 +16,15 @@ class Prova extends \BibliotecaConcurseiro\Models\AppModel
     protected $fillable = [
         'concurso_id',
         'cargo_id',
-        'nivel'
+        'nome'
     ];
+    protected function concurso()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Concurso');
+    }
+    protected function cargo()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Cargo');
+    }
 
 }

@@ -123,8 +123,8 @@ class QuestoesController extends Controller
         $data = json_decode($request_body);
         QuestaoFactory::convertQuestaoToUpdate($questao, $data);
         $saveQuestao = $questao->save();
-        foreach ($data['respostas'] as $key => $value) {
-            $questaoresposta = QuestaoResposta::find($value['id']);
+        foreach ($data->questoesresposta as $key => $value) {
+            $questaoresposta = QuestaoResposta::find($value->id);
             QuestaoFactory::convertQuestaoRespostaToUpdate($questaoresposta, $value);
             $questaoresposta->save();
         }

@@ -16,6 +16,19 @@ $factory->define(BibliotecaConcurseiro\Entities\Cargo::class, function (Faker\Ge
         'nome' => $faker->name
     ];
 });
+$factory->define(BibliotecaConcurseiro\Entities\Assunto::class, function (Faker\Generator $faker) {
+    return [
+        'disciplina_id' => rand(1,100),
+        'nome' => $faker->name
+    ];
+});
+$factory->define(BibliotecaConcurseiro\Entities\Prova::class, function (Faker\Generator $faker) {
+    return [
+        'cargo_id' => rand(1,100),
+        'concurso_id' => rand(1,100),
+        'nome' => $faker->name
+    ];
+});
 $factory->define(\BibliotecaConcurseiro\Entities\Disciplina::class, function (Faker\Generator $faker) {
     return [
         'nome' => $faker->name
@@ -45,7 +58,8 @@ $factory->define(BibliotecaConcurseiro\Entities\Questao::class, function (Faker\
         'cargo_id' => rand(1,100),
         'multipla_escolha' => $faker->boolean(),
         'tipo_questao' => rand(1,2),
-        'texto' => $faker->text('512')
+        'texto' => $faker->text('512'),
+        'texto_auxiliar' => $faker->text('512')
     ];
 });
 $factory->define(BibliotecaConcurseiro\Entities\QuestaoResposta::class, function (Faker\Generator $faker) {

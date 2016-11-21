@@ -8,6 +8,9 @@
 
 namespace BibliotecaConcurseiro\Http\Controllers;
 
+use BibliotecaConcurseiro\Entities\Assunto;
+use BibliotecaConcurseiro\Entities\Cargo;
+use BibliotecaConcurseiro\Entities\Prova;
 use BibliotecaConcurseiro\Entities\Questao;
 use BibliotecaConcurseiro\Entities\Disciplina;
 use BibliotecaConcurseiro\Entities\Banca;
@@ -46,7 +49,10 @@ class QuestoesPublicController extends Controller
         $where = [];
         $concursos = [];
         if (isset($data['concurso_id'])) {
-            array_push($concursos, $data['concurso_id']);
+            $selectAnoConcursos = Concurso::where(['ano'=>$data['concurso_id']])->get();
+            foreach($selectAnoConcursos as $key => $value){
+                array_push($concursos, $value['id']);
+            }
         }
         if (isset($data['banca_id'])) {
             $concurso_id_banca = Concurso::where(['banca_id' => $data['banca_id']])->get();
@@ -58,6 +64,15 @@ class QuestoesPublicController extends Controller
             $concurso_id_banca = Concurso::where(['orgao_id' => $data['orgao_id']])->get();
             foreach ($concurso_id_banca as $key => $value) {
                 array_push($concursos, $value['id']);
+            }
+        }
+        if (isset($data['assunto_id'])) {
+            if (count($where) == 0) {
+                $where[] = ['assunto_id' => $data['assunto_id']];
+            } else {
+                array_push($where, [
+                    'assunto_id' => $data['assunto_id']
+                ]);
             }
         }
         if (isset($data['nivel_questao'])) {
@@ -97,18 +112,19 @@ class QuestoesPublicController extends Controller
             }
         }
         $filter = $this->populateFilterList($where);
-        $re['Total-Questoes'] = Questao::where($filter)->count();
         if (count($concursos) > 0) {
+            $re['X-Total-Questoes'] = Questao::whereIn('concurso_id', array_unique($concursos))->where($filter)->count();
             $questao = Questao::whereIn('concurso_id', array_unique($concursos))->where($filter)->orderBy('id', 'DESC')->limit($top)->offset($skip)->get();
         } else {
             if (count($filter) > 0) {
+                $re['X-Total-Questoes'] = Questao::where($filter)->count();
                 $questao = Questao::where($filter)->orderBy('id', 'DESC')->limit($top)->offset($skip)->get();
             } else {
                 if(count($this->checkFilterValues($data)) > 0){
                     $questao = [];
-                    $re['Total-Questoes'] = 0;
+                    $re['X-Total-Questoes'] = 0;
                 }else{
-                    $re['Total-Questoes'] = Questao::count();
+                    $re['X-Total-Questoes'] = Questao::count();
                     $questao = Questao::orderBy('id', 'DESC')->limit($top)->offset($skip)->get();
                 }
             }
@@ -127,8 +143,8 @@ class QuestoesPublicController extends Controller
         foreach ($arr as $key => $value) {
             $retorno[] = [
                 'disciplina' => [
-                    'id' => $value->disciplina->id,
-                    'nome' => $value->disciplina->nome
+                    'id' => $value->id,
+                    'nome' => $value->nome
                 ]
             ];
         }
@@ -146,6 +162,7 @@ class QuestoesPublicController extends Controller
                     'banca' => $value->concurso->banca->nome,
                     'orgao' => $value->concurso->orgao->nome,
                     'cargo' => $value->cargo->nome,
+                    'prova' => isset($value->prova) ? $value->prova->nome : "",
                     'anoConcurso' => $value->concurso->ano,
                     'disciplina' => $value->disciplina->nome
                 ]
@@ -216,7 +233,7 @@ class QuestoesPublicController extends Controller
             $filter = $this->populateFilterList($where);
             $questao = Questao::where($filter)->orderBy('id', 'DESC')->get();
         } else {
-            $questao = Questao::orderBy('id', 'DESC')->get();
+            $questao = Disciplina::orderBy('id', 'DESC')->get();
         }
 
         $re = $this->populateDisciplinas($questao);
@@ -252,23 +269,48 @@ class QuestoesPublicController extends Controller
         ];
         return response()->json($re);
     }
+    public function getInstituicoes()
+    {
+        $orgaos = Orgao::orderBy('id', 'DESC')->get();
+        $re = [];
+        foreach ($orgaos as $key => $value) {
+            $re[$key] = [
+                "orgao" => [
+                    "id" => $value['id'],
+                    "nome" => $value['nome']
+                ]
+            ];
+        }
+        $retorno = [
+            'filtroInstituicoes' => $re
+        ];
+        return response()->json($re);
+    }
 
     public function getCargos(Request $request)
     {
-        $orgao_id = $request->all()['orgao_id'];
-        $concurso = Concurso::where('orgao_id', $orgao_id)->orderBy('id', 'DESC')->get();
+//        $orgao_id = $request->all()['orgao_id'];
+//        $concurso = Concurso::where('orgao_id', $orgao_id)->orderBy('id', 'DESC')->get();
+        $cargos = Cargo::orderBy('id', 'DESC')->get();
         $re = [];
-        foreach ($concurso as $key => $value) {
-            if ($value->questoes) {
-                foreach ($value->questoes as $k => $v) {
-                    $re[] = [
-                        "cargos" => [
-                            "id" => $v->cargo->id,
-                            "nome" => $v->cargo->nome
-                        ]
-                    ];
-                }
-            }
+        foreach ($cargos as $key => $value) {
+            $re[] = [
+                'cargos' => [
+                    'id' => $value->id,
+                    'nome' => $value->nome
+                ]
+            ];
+            // Implementação com filtro
+//            if ($value->questoes) {
+//                foreach ($value->questoes as $k => $v) {
+//                    $re[] = [
+//                        "cargos" => [
+//                            "id" => $v->cargo->id,
+//                            "nome" => $v->cargo->nome
+//                        ]
+//                    ];
+//                }
+//            }
         }
         $retorno = [
             'filtroCargos' => $re
@@ -278,14 +320,16 @@ class QuestoesPublicController extends Controller
 
     public function getConcursos(Request $request)
     {
-        $cargo_id = $request->all()['cargo_id'];
-        $questao = Questao::where('cargo_id', $cargo_id)->orderBy('id', 'DESC')->get();
+        //$cargo_id = $request->all()['cargo_id'];
+        //$questao = Questao::where('cargo_id', $cargo_id)->orderBy('id', 'DESC')->get();
+        $concurso = Concurso::groupBy('ano')->distinct()->orderBy('ano', 'DESC')->get();
+
         $re = [];
-        foreach ($questao as $key => $value) {
+        foreach ($concurso as $key => $value) {
             $re[] = [
                 "concurso" => [
-                    "id" => $value->concurso->id,
-                    "ano" => $value->concurso->ano
+                    "id" => $value->id,
+                    "ano" => $value->ano
                 ]
             ];
         }
@@ -295,9 +339,39 @@ class QuestoesPublicController extends Controller
         return response()->json($retorno);
     }
 
-    public function getAssunto()
+    public function getAssuntos()
     {
-
+        $assunto = Assunto::orderBy('id', 'DESC')->get();
+        $re = [];
+        foreach ($assunto as $key => $value) {
+            $re[] = [
+                "assuntos" => [
+                    "id" => $value->id,
+                    "nome" => $value->nome
+                ]
+            ];
+        }
+        $retorno = [
+            'filtroAssuntos' => $re
+        ];
+        return response()->json($retorno);
+    }
+    public function getProvas()
+    {
+        $prova = Prova::orderBy('id', 'DESC')->get();
+        $re = [];
+        foreach ($prova as $key => $value) {
+            $re[] = [
+                "provas" => [
+                    "id" => $value->id,
+                    "nome" => $value->ano
+                ]
+            ];
+        }
+        $retorno = [
+            'filtroProvas' => $re
+        ];
+        return response()->json($retorno);
     }
 
 

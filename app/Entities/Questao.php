@@ -34,6 +34,14 @@ class Questao extends \BibliotecaConcurseiro\Models\AppModel
     {
         return $this->belongsTo('BibliotecaConcurseiro\Entities\Cargo');
     }
+    protected function prova()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Prova');
+    }
+    protected function assunto()
+    {
+        return $this->belongsTo('BibliotecaConcurseiro\Entities\Assunto');
+    }
     protected function questoesresposta()
     {
         return $this->hasMany('BibliotecaConcurseiro\Entities\QuestaoResposta');

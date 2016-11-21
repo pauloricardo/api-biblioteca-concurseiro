@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call('OrgaoTableSeeder');
         $this->call('ConcursoTableSeeder');
         $this->call('QuestaoTableSeeder');
+        $this->call('ProvaTableSeeder');
+        $this->call('AssuntoTableSeeder');
         Model::reguard();
     }
 }

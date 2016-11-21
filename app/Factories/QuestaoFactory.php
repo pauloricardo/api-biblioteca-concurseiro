@@ -21,9 +21,12 @@ class QuestaoFactory
                 'disciplina_id' => $questao->disciplina_id,
                 'cargo_id' => $questao->cargo_id,
                 'concurso_id' => $questao->concurso_id,
+                'assunto_id' => $questao->assunto_id,
+                'prova_id' => $questao->prova_id,
                 'multipla_escolha' => $questao->multipla_escolha,
                 'tipo_questao' => $questao->tipo_questao,
-                'texto' => $questao->texto
+                'texto' => $questao->texto,
+                'texto_auxiliar' => $questao->texto_auxiliar,
             ];
             if ($questao->questoesresposta) {
                 foreach ($questao->questoesresposta as $key => $value) {
@@ -49,7 +52,10 @@ class QuestaoFactory
                 'disciplina_id' => $questao->disciplina_id,
                 'cargo_id' => $questao->cargo_id,
                 'concurso_id' => $questao->concurso_id,
-                'texto' => $questao->texto
+                'assunto_id' => $questao->assunto_id,
+                'prova_id' => $questao->prova_id,
+                'texto' => $questao->texto,
+                'texto_auxiliar' => $questao->texto_auxiliar
             ];
 
             if ($questao->questoesresposta) {
@@ -75,11 +81,16 @@ class QuestaoFactory
                 $converted[] = [
                     'id' => $value->id,
                     'texto' => strip_tags(nl2br($value->texto)),
+                    'texto_auxiliar' => $value->texto_auxiliar,
                     'concurso' => ConcursoFactory::convert($value->concurso),
                     'disciplina' => DisciplinaFactory::convert($value->disciplina),
                     'cargo' => CargoFactory::convert($value->cargo),
+                    'prova' => $value->prova,
+                    'assunto' => $value->assunto,
                     'concurso_id' => $value->concurso_id,
                     'disciplina_id' => $value->disciplina_id,
+                    'assunto_id' => $value->assunto_id,
+                    'prova_id' => $value->prova_id,
                     'multipla_escolha' => $value->multipla_escolha,
                     'tipo_questao' => $value->tipo_questao,
                     'cargo_id' => $value->cargo_id,
@@ -90,20 +101,24 @@ class QuestaoFactory
     }
     public static function convertQuestaoToUpdate($object, $array){
         if(isset($object) && isset($array)){
-            $object->texto = $array['texto'];
-            $object->concurso_id = $array['concurso_id'];
-            $object->disciplina_id = $array['disciplina_id'];
-            $object->multipla_escolha = $array['multipla_escolha'];
-            $object->tipo_questao = $array['tipo_questao'];
-            $object->cargo_id = $array['cargo_id'];
+            $object->texto = $array->texto;
+            $object->texto_auxiliar = $array->texto_auxiliar;
+            $object->concurso_id = $array->concurso_id;
+            $object->disciplina_id = $array->disciplina_id;
+            $object->assunto_id = $array->assunto_id;
+            $object->prova_id = $array->prova_id;
+
+            $object->multipla_escolha = $array->multipla_escolha;
+            $object->tipo_questao = $array->tipo_questao;
+            $object->cargo_id = $array->cargo_id;
 
         }
     }
     public static function convertQuestaoRespostaToUpdate($object, $array){
         if(isset($object) && isset($array)){
-            $object->enunciado = $array['enunciado'];
-            $object->correta = $array['correta'];
-            $object->questao_id = $array['questao_id'];
+            $object->enunciado = $array->enunciado;
+            $object->correta = $array->correta;
+            $object->questao_id = $array->questao_id;
         }
     }
 }

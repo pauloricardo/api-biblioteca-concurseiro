@@ -25,7 +25,8 @@ class CreateQuestoesTable extends Migration
             $table->foreign('cargo_id')->references('id')->on('cargos');
 
             $table->mediumText('texto');
-
+            $table->mediumText('texto_auxiliar');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

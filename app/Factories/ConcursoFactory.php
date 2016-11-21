@@ -7,7 +7,7 @@
  */
 
 namespace BibliotecaConcurseiro\Factories;
-
+use BibliotecaConcurseiro\Factories\BancaFactory;
 
 class ConcursoFactory
 {

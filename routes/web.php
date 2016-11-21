@@ -26,6 +26,21 @@ $app->get('/api/v1/bancas/{id}', 'BancasController@getBanca');
 $app->post('/api/v1/bancas/', 'BancasController@save');
 $app->post('/api/v1/bancas/{id}', 'BancasController@update');
 
+$app->get('/api/v1/provas/', 'ProvasController@index');
+$app->get('/api/v1/provas/{skip}/{top}', 'ProvasController@index');
+$app->get('/api/v1/provas/fn/trash/{id}', 'ProvasController@deleta');
+$app->get('/api/v1/provas/{id}', 'ProvasController@getProva');
+$app->post('/api/v1/provas/', 'ProvasController@save');
+$app->post('/api/v1/provas/{id}', 'ProvasController@update');
+
+$app->get('/api/v1/assuntos/', 'AssuntosController@index');
+$app->get('/api/v1/assuntos/{skip}/{top}', 'AssuntosController@index');
+$app->get('/api/v1/assuntos/fn/trash/{id}', 'AssuntosController@deleta');
+$app->get('/api/v1/assuntos/{id}', 'AssuntosController@getAssunto');
+$app->post('/api/v1/assuntos/', 'AssuntosController@save');
+$app->post('/api/v1/assuntos/{id}', 'AssuntosController@update');
+
+
 $app->get('/api/v1/orgaos/{skip}/{top}', 'OrgaosController@index');
 $app->get('/api/v1/orgaos/', 'OrgaosController@index');
 $app->get('/api/v1/orgaos/fn/trash/{id}', 'OrgaosController@deleta');
@@ -58,6 +73,9 @@ $app->post('/api/v1/questoes/{id}', 'QuestoesController@update');
 
 /** ROTAS PÚBLICAS**/
 $app->get('/api/v1/public/bancas', 'QuestoesPublicController@getBancas');
+$app->get('/api/v1/public/assuntos', 'QuestoesPublicController@getAssuntos');
+$app->get('/api/v1/public/instituicoes', 'QuestoesPublicController@getInstituicoes');
+$app->get('/api/v1/public/provas', 'QuestoesPublicController@getProvas');
 $app->get('/api/v1/public/cargos', 'QuestoesPublicController@getCargos');
 $app->get('/api/v1/public/concursos', 'QuestoesPublicController@getConcursos');
 $app->get('/api/v1/public/disciplinas', 'QuestoesPublicController@getDisciplinas');

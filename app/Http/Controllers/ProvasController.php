@@ -8,63 +8,64 @@
 
 namespace BibliotecaConcurseiro\Http\Controllers;
 use BibliotecaConcurseiro\Entities\Prova;
+use BibliotecaConcurseiro\Entities\Concurso;
+use BibliotecaConcurseiro\Entities\Cargo;
+use BibliotecaConcurseiro\Factories\ProvaFactory;
 use BibliotecaConcurseiro\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 
 class ProvasController extends Controller
 {
-    protected $disciplinasList;
+    protected $provasList;
 
     public function index($skip=null, $top=null){
 
         if(is_null($skip) && is_null($top)){
-            $this->disciplinasList = Disciplina::all();
+            $this->provasList = ProvaFactory::convertList(Prova::all());
         }else{
-            $this->disciplinasList = Disciplina::limit($top)->offset($skip)->orderBy('id','DESC')->get();
+            $this->provasList = ProvaFactory::convertList(Prova::limit($top)->offset($skip)->orderBy('id','DESC')->get());
         }
 
         $retorno = [
-          'X-Total-Rows' => count(Disciplina::all()),
-          'disciplinas' => $this->disciplinasList
+          'X-Total-Rows' => count(Prova::all()),
+          'provas' => $this->provasList
         ];
 
         return response()->json($retorno);
     }
 
-    public function getDisciplina($id){
-        $disciplinas = Disciplina::find($id);
+    public function getProva($id){
+        $provas = Prova::find($id);
 
-        return response()->json($disciplinas);
+        return response()->json($provas);
     }
 
     public function save(Request $request){
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
-        $data = [
-            'nome' => $data->nome
-        ];
-        $disciplina = Disciplina::create($data);
+        $data = ProvaFactory::convertBack($data);
+        $prova = Prova::create($data);
 
-        return response()->json($disciplina);
+        return response()->json($prova);
     }
 
     public function deleta($id){
-        $disciplina = Disciplina::find($id);
-        $disciplina->delete();
+        $prova = Prova::find($id);
+        $prova->delete();
 
         return response()->json('deleted');
 
     }
     public function update(Request $request, $id){
 
-        $disciplina = Disciplina::find($id);
+        $prova = Prova::find($id);
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
+        ProvaFactory::convertObject($prova, $data);
 
-        $disciplina->nome = $data->nome;
-        $disciplina->save();
+        $prova->save();
 
-        return response()->json($disciplina);
+        return response()->json($data);
     }
 }
