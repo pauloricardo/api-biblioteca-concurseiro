@@ -82,6 +82,22 @@ $app->singleton(
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
+$app->register('LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider');
+$app->register('Optimus\OAuth2Server\OAuth2ServerServiceProvider');
+$app->middleware([
+    'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware'
+]);
+
+$app->routeMiddleware([
+    'check-authorization-params' => 'Optimus\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware',
+    'csrf' => 'Laravel\Lumen\Http\Middleware\VerifyCsrfToken',
+    'oauth' => 'Optimus\OAuth2Server\Middleware\OAuthMiddleware',
+    'oauth-owner' => 'Optimus\OAuth2Server\Middleware\OAuthOwnerMiddleware'
+]);
+//class_alias('Illuminate\Support\Facades\Config', 'Config');
+//$app->withFacades();
+$app->configure('app');
+$app->configure('secrets');
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
