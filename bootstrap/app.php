@@ -85,7 +85,8 @@ $app->singleton(
 $app->register('LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider');
 $app->register('Optimus\OAuth2Server\OAuth2ServerServiceProvider');
 $app->middleware([
-    'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware'
+    'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',
+     'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse'
 ]);
 
 $app->routeMiddleware([

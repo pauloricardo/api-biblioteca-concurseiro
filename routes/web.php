@@ -10,66 +10,81 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+$app->post('login', function() use($app) {
+    $credentials = app()->make('request')->input("credentials");
+    return $app->make('App\Auth\Proxy')->attemptLogin($credentials);
+});
 
-$app->get('/api/v1/disciplinas/{skip}/{top}', 'DisciplinasController@index');
-$app->get('/api/v1/disciplinas/', 'DisciplinasController@index');
-$app->get('/api/v1/disciplinas/fn/trash/{id}', 'DisciplinasController@deleta');
-$app->get('/api/v1/disciplinas/{id}', 'DisciplinasController@getDisciplina');
-$app->post('/api/v1/disciplinas/', 'DisciplinasController@save');
-$app->post('/api/v1/disciplinas/{id}', 'DisciplinasController@update');
+$app->post('refresh-token', function() use($app) {
+    return $app->make('App\Auth\Proxy')->attemptRefresh();
+});
 
-$app->get('/api/v1/bancas/{skip}/{top}', 'BancasController@index');
+$app->post('oauth/access-token', function() use($app) {
+    return response()->json($app->make('oauth2-server.authorizer')->issueAccessToken());
+});
 
-$app->get('/api/v1/bancas/', 'BancasController@index');
-$app->get('/api/v1/bancas/fn/trash/{id}', 'BancasController@deleta');
-$app->get('/api/v1/bancas/{id}', 'BancasController@getBanca');
-$app->post('/api/v1/bancas/', 'BancasController@save');
-$app->post('/api/v1/bancas/{id}', 'BancasController@update');
+$app->group(['prefix'=>'api/v1', 'middleware'=>'oauth'], function($app){
+  $app->get('disciplinas/{skip}/{top}', 'DisciplinasController@index');
+  $app->get('disciplinas/', 'DisciplinasController@index');
+  $app->get('disciplinas/fn/trash/{id}', 'DisciplinasController@deleta');
+  $app->get('disciplinas/{id}', 'DisciplinasController@getDisciplina');
+  $app->post('disciplinas/', 'DisciplinasController@save');
+  $app->post('disciplinas/{id}', 'DisciplinasController@update');
 
-$app->get('/api/v1/provas/', 'ProvasController@index');
-$app->get('/api/v1/provas/{skip}/{top}', 'ProvasController@index');
-$app->get('/api/v1/provas/fn/trash/{id}', 'ProvasController@deleta');
-$app->get('/api/v1/provas/{id}', 'ProvasController@getProva');
-$app->post('/api/v1/provas/', 'ProvasController@save');
-$app->post('/api/v1/provas/{id}', 'ProvasController@update');
+  $app->get('bancas/{skip}/{top}', 'BancasController@index');
 
-$app->get('/api/v1/assuntos/', 'AssuntosController@index');
-$app->get('/api/v1/assuntos/{skip}/{top}', 'AssuntosController@index');
-$app->get('/api/v1/assuntos/fn/trash/{id}', 'AssuntosController@deleta');
-$app->get('/api/v1/assuntos/{id}', 'AssuntosController@getAssunto');
-$app->post('/api/v1/assuntos/', 'AssuntosController@save');
-$app->post('/api/v1/assuntos/{id}', 'AssuntosController@update');
+  $app->get('bancas/', 'BancasController@index');
+  $app->get('bancas/fn/trash/{id}', 'BancasController@deleta');
+  $app->get('bancas/{id}', 'BancasController@getBanca');
+  $app->post('bancas/', 'BancasController@save');
+  $app->post('bancas/{id}', 'BancasController@update');
+
+  $app->get('provas/', 'ProvasController@index');
+  $app->get('provas/{skip}/{top}', 'ProvasController@index');
+  $app->get('provas/fn/trash/{id}', 'ProvasController@deleta');
+  $app->get('provas/{id}', 'ProvasController@getProva');
+  $app->post('provas/', 'ProvasController@save');
+  $app->post('provas/{id}', 'ProvasController@update');
+
+  $app->get('assuntos/', 'AssuntosController@index');
+  $app->get('assuntos/{skip}/{top}', 'AssuntosController@index');
+  $app->get('assuntos/fn/trash/{id}', 'AssuntosController@deleta');
+  $app->get('assuntos/{id}', 'AssuntosController@getAssunto');
+  $app->post('assuntos/', 'AssuntosController@save');
+  $app->post('assuntos/{id}', 'AssuntosController@update');
 
 
-$app->get('/api/v1/orgaos/{skip}/{top}', 'OrgaosController@index');
-$app->get('/api/v1/orgaos/', 'OrgaosController@index');
-$app->get('/api/v1/orgaos/fn/trash/{id}', 'OrgaosController@deleta');
-$app->get('/api/v1/orgaos/{id}', 'OrgaosController@getOrgao');
-$app->post('/api/v1/orgaos/', 'OrgaosController@save');
-$app->post('/api/v1/orgaos/{id}', 'OrgaosController@update');
+  $app->get('orgaos/{skip}/{top}', 'OrgaosController@index');
+  $app->get('orgaos/', 'OrgaosController@index');
+  $app->get('orgaos/fn/trash/{id}', 'OrgaosController@deleta');
+  $app->get('orgaos/{id}', 'OrgaosController@getOrgao');
+  $app->post('orgaos/', 'OrgaosController@save');
+  $app->post('orgaos/{id}', 'OrgaosController@update');
 
-$app->get('/api/v1/cargos/{skip}/{top}', 'CargosController@index');
-$app->get('/api/v1/cargos/', 'CargosController@index');
-$app->get('/api/v1/cargos/fn/trash/{id}', 'CargosController@deleta');
-$app->get('/api/v1/cargos/{id}', 'CargosController@getCargo');
-$app->post('/api/v1/cargos/', 'CargosController@save');
-$app->post('/api/v1/cargos/{id}', 'CargosController@update');
+  $app->get('cargos/{skip}/{top}', 'CargosController@index');
+  $app->get('cargos/', 'CargosController@index');
+  $app->get('cargos/fn/trash/{id}', 'CargosController@deleta');
+  $app->get('cargos/{id}', 'CargosController@getCargo');
+  $app->post('cargos/', 'CargosController@save');
+  $app->post('cargos/{id}', 'CargosController@update');
 
-$app->get('/api/v1/concursos/{skip}/{top}', 'ConcursosController@index');
-$app->get('/api/v1/concursos/', 'ConcursosController@index');
-$app->get('/api/v1/concursos/fn/trash/{id}', 'ConcursosController@deleta');
-$app->get('/api/v1/concursos/{id}', 'ConcursosController@getConcurso');
-$app->post('/api/v1/concursos/', 'ConcursosController@save');
-$app->post('/api/v1/concursos/{id}', 'ConcursosController@update');
+  $app->get('concursos/{skip}/{top}', 'ConcursosController@index');
+  $app->get('concursos/', 'ConcursosController@index');
+  $app->get('concursos/fn/trash/{id}', 'ConcursosController@deleta');
+  $app->get('concursos/{id}', 'ConcursosController@getConcurso');
+  $app->post('concursos/', 'ConcursosController@save');
+  $app->post('concursos/{id}', 'ConcursosController@update');
 
-$app->get('/api/v1/questoes/{skip}/{top}/', 'QuestoesController@index');
-$app->get('/api/v1/questoes/{filtroDisciplina}/{filtroConcurso}/{skip}/{top}/', 'QuestoesController@index');
-$app->get('/api/v1/questoes/', 'QuestoesController@index');
-$app->get('/api/v1/questoes/fn/trash/{id}', 'QuestoesController@trash');
-$app->get('/api/v1/questoes/{id}', 'QuestoesController@getQuestao');
-$app->post('/api/v1/questoes/', 'QuestoesController@save');
-$app->post('/api/v1/questoes/uploadQuestaoFile', 'QuestoesController@uploadQuestaoFile');
-$app->post('/api/v1/questoes/{id}', 'QuestoesController@update');
+  $app->get('questoes/{skip}/{top}/', 'QuestoesController@index');
+  $app->get('questoes/{filtroDisciplina}/{filtroConcurso}/{skip}/{top}/', 'QuestoesController@index');
+  $app->get('questoes/', 'QuestoesController@index');
+  $app->get('questoes/fn/trash/{id}', 'QuestoesController@trash');
+  $app->get('questoes/{id}', 'QuestoesController@getQuestao');
+  $app->post('questoes/', 'QuestoesController@save');
+  $app->post('questoes/uploadQuestaoFile', 'QuestoesController@uploadQuestaoFile');
+  $app->post('questoes/{id}', 'QuestoesController@update');
+});
+
 
 /** ROTAS PÚBLICAS**/
 $app->get('/api/v1/public/bancas', 'QuestoesPublicController@getBancas');
