@@ -15,10 +15,12 @@ class ConcursoFactory
         $converted = [];
         if($concurso){
             $converted = [
-                'id' => $concurso->id,
+                'id' => isset($concurso->id) ? $concurso->id : "",
                 'ano' => $concurso->ano,
-                'orgao' => $concurso->orgao ? OrgaoFactory::convert($concurso->orgao) : "",
-                'banca' => $concurso->orgao ? BancaFactory::convert($concurso->banca) : ""
+                'orgao' => isset($concurso->orgao) ? OrgaoFactory::convert($concurso->orgao) : "",
+                'banca' => isset($concurso->orgao) ? BancaFactory::convert($concurso->banca) : "",
+                'orgao_id' => $concurso->orgao_id,
+                'banca_id' => $concurso->banca_id
             ];
             if($converted['orgao'] === ''){
                 unset($converted['orgao']);

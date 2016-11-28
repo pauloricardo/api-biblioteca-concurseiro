@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Auth;
+namespace BibliotecaConcurseiro\Auth;
 
-use GuzzleHttp\Client;
+use \GuzzleHttp\Client;
 
 class Proxy {
 
@@ -21,11 +21,11 @@ class Proxy {
         ]);
     }
 
-    private function proxy($grantType, array $data = [])
+    private function proxy($grantType, array $_data = [])
     {
         try {
             $config = app()->make('config');
-
+            $data = [];
             $data = array_merge([
                 'client_id'     => $config->get('secrets.client_id'),
                 'client_secret' => $config->get('secrets.client_secret'),
@@ -33,17 +33,17 @@ class Proxy {
             ], $data);
 
             $client = new Client();
-            $guzzleResponse = $client->post(sprintf('%s/oauth/access-token', $config->get('app.url')), [
+            $guzzleResponse = $client->post(sprintf('%s/oauth/access-token', 'http://biblioteca-concurseiro:8000'), [
                 'form_params' => $data
             ]);
+            var_dump($guzzleResponse);die;
+
         } catch(\GuzzleHttp\Exception\BadResponseException $e) {
             $guzzleResponse = $e->getResponse();
-
         }
 
         $response = json_decode($guzzleResponse->getBody());
-
-        if (property_exists($response, "access_token")) {
+        if (isset($response->access_token)) {
             $cookie = app()->make('cookie');
             $crypt  = app()->make('encrypter');
 

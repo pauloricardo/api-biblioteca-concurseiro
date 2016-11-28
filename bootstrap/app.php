@@ -59,13 +59,19 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
+ $app->middleware([
 //    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+\BibliotecaConcurseiro\Http\Middleware\CorsMiddleware::class
+ ]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
+$app->routeMiddleware([
+    'jwt-auth' => \BibliotecaConcurseiro\Http\Middleware\Authenticate::class,
+    'cors' => \BibliotecaConcurseiro\Http\Middleware\CorsMiddleware::class,
+    'cors.options' => \BibliotecaConcurseiro\Http\Middleware\CorsOptionsMiddleware::class
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -81,24 +87,19 @@ $app->singleton(
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->withFacades();
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(BibliotecaConcurseiro\Providers\AppServiceProvider::class);
+$app->register(\BibliotecaConcurseiro\Providers\CallAllOptionsRequestServiceProvider::class);
 
-$app->register('LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider');
-$app->register('Optimus\OAuth2Server\OAuth2ServerServiceProvider');
-$app->middleware([
-    'LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware',
-     'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse'
-]);
+//$app->register(Tymon\JWTAuth\Providers\Storage\IlluminateCacheAdapter::class);
+//$app->alias('Cache', 'Illuminate\Cache\CacheManager');
+//$app->alias('Auth', 'Illuminate\Auth\AuthManager');
+$app->configure('jwt');
 
-$app->routeMiddleware([
-    'check-authorization-params' => 'Optimus\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware',
-    'csrf' => 'Laravel\Lumen\Http\Middleware\VerifyCsrfToken',
-    'oauth' => 'Optimus\OAuth2Server\Middleware\OAuthMiddleware',
-    'oauth-owner' => 'Optimus\OAuth2Server\Middleware\OAuthOwnerMiddleware'
-]);
+//class_alias('Tymon\JWTAuth\Facades\JWTFactory', 'JWTFactory');
+//class_alias('Illuminate\Cache\CacheManager', 'Cache');
 //class_alias('Illuminate\Support\Facades\Config', 'Config');
-//$app->withFacades();
-$app->configure('app');
-$app->configure('secrets');
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

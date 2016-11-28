@@ -10,20 +10,10 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-$app->post('login', function() use($app) {
-    $credentials = app()->make('request')->input("credentials");
-    return $app->make('App\Auth\Proxy')->attemptLogin($credentials);
-});
+$app->post('auth/login', 'AuthController@authenticate');
 
-$app->post('refresh-token', function() use($app) {
-    return $app->make('App\Auth\Proxy')->attemptRefresh();
-});
 
-$app->post('oauth/access-token', function() use($app) {
-    return response()->json($app->make('oauth2-server.authorizer')->issueAccessToken());
-});
-
-$app->group(['prefix'=>'api/v1', 'middleware'=>'oauth'], function($app){
+$app->group(['prefix'=>'api/v1', 'middleware' => ['before' => 'jwt-auth']], function($app){
   $app->get('disciplinas/{skip}/{top}', 'DisciplinasController@index');
   $app->get('disciplinas/', 'DisciplinasController@index');
   $app->get('disciplinas/fn/trash/{id}', 'DisciplinasController@deleta');

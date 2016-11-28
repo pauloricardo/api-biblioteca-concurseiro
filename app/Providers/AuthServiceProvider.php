@@ -2,7 +2,7 @@
 
 namespace BibliotecaConcurseiro\Providers;
 
-use App\User;
+use BibliotecaConcurseiro\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 

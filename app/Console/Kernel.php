@@ -13,8 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \Laravelista\LumenVendorPublish\VendorPublishCommand::class
     ];
+
 
     /**
      * Define the application's command schedule.
