@@ -8,7 +8,7 @@
 
 namespace BibliotecaConcurseiro\Http\Controllers;
 use BibliotecaConcurseiro\Auth\User;
-use BibliotecaConcurseiro\Factories\Usuario;
+use BibliotecaConcurseiro\Factories\UsuarioFactory;
 use BibliotecaConcurseiro\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -20,11 +20,11 @@ class UsuariosController extends Controller
     public function index($skip=null, $top=null){
         $total = 0;
         if(is_null($skip) && is_null($top)){
-            $total = Usuario::all();
-            $this->usuariosList = UsuarioFactory::convertList(Usuario::all());
+            $total = User::all();
+            $this->usuariosList = UsuarioFactory::convertList(User::all());
         }else{
-            $this->usuariosList = UsuarioFactory::convertList(Usuario::limit($top)->offset($skip)->orderBy('id','DESC')->get());
-            $total = count($this->assuntosList);
+            $this->usuariosList = UsuarioFactory::convertList(User::limit($top)->offset($skip)->orderBy('id','DESC')->get());
+            $total = count($this->usuariosList);
         }
 
         $retorno = [
@@ -36,7 +36,7 @@ class UsuariosController extends Controller
     }
 
     public function getUsuario($id){
-        $usuario = Usuario::find($id);
+        $usuario = User::find($id);
 
         return response()->json($usuario);
     }
@@ -45,13 +45,16 @@ class UsuariosController extends Controller
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
         $data = UsuarioFactory::convertBack($data);
-        $usuario = Usuario::create($data);
+        $hasher = app()->make('hash');
+
+        $data['password'] = $hasher->make($data['password']);
+        $usuario = User::create($data);
 
         return response()->json($usuario);
     }
 
     public function deleta($id){
-        $usuario = Usuario::find($id);
+        $usuario = User::find($id);
         $usuario->delete();
 
         return response()->json('deleted');
@@ -59,10 +62,13 @@ class UsuariosController extends Controller
     }
     public function update(Request $request, $id){
 
-        $usuario = Usuario::find($id);
+        $usuario = User::find($id);
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body);
         UsuarioFactory::convertObject($usuario, $data);
+        if(isset($data['password'])){
+            $usuario->password = $hasher->make($data['password']);
+        }
         $usuario->save();
 
         return response()->json($usuario);

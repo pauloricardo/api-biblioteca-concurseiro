@@ -23,6 +23,7 @@ class Authenticate extends Auth
         $this->checkForToken($request);
 
         $tokenFetch = $this->auth->parseToken()->authenticate();
+
         try {
         } catch (JWTException $e) {
             throw new UnauthorizedHttpException('jwt-auth', $e->getMessage(), $e, $e->getCode());

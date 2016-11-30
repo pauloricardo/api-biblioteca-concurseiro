@@ -65,6 +65,13 @@ $app->group(['prefix'=>'api/v1', 'middleware' => ['before' => 'jwt-auth']], func
   $app->post('concursos/', 'ConcursosController@save');
   $app->post('concursos/{id}', 'ConcursosController@update');
 
+    $app->get('usuarios/{skip}/{top}', 'UsuariosController@index');
+    $app->get('usuarios/', 'UsuariosController@index');
+    $app->get('usuarios/fn/trash/{id}', 'UsuariosController@deleta');
+    $app->get('usuarios/{id}', 'UsuariosController@getUsuario');
+    $app->post('usuarios/', 'UsuariosController@save');
+    $app->post('usuarios/{id}', 'UsuariosController@update');
+
   $app->get('questoes/{skip}/{top}/', 'QuestoesController@index');
   $app->get('questoes/{filtroDisciplina}/{filtroConcurso}/{skip}/{top}/', 'QuestoesController@index');
   $app->get('questoes/', 'QuestoesController@index');

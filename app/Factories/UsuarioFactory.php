@@ -16,25 +16,43 @@ class UsuarioFactory
         if($usuario){
             $converted = [
                 'id' => $usuario->id,
-                'nome' => $usuario->nome,
+                'name' => $usuario->name,
                 'email' => $usuario->email,
-                'password' => $usuario->nopasswordme
+                'password' => $usuario->password
             ];
         }else{
             $converted = [
                 'id' => null,
-                'nome' => null,
+                'name' => null,
                 'email' => null,
                 'password' => null
             ];
         }
         return $converted;
     }
-
+    public static function convertBack($usuario){
+        $converted = [];
+        if($usuario){
+            $converted = [
+                'id' => isset($usuario->id) ? $usuario->id : null,
+                'name' => $usuario->name,
+                'email' => $usuario->email,
+                'password' => $usuario->password
+            ];
+        }else{
+            $converted = [
+                'id' => null,
+                'name' => null,
+                'email' => null,
+                'password' => null,
+            ];
+        }
+        return $converted;
+    }
     public static function convertObject($object, $usuario){
         $object->id = $usuario->id;
         $object->email = $usuario->disciplina_id;
-        $object->nome = $usuario->nome;
+        $object->name = $usuario->name;
         $object->password = $usuario->password;
 
     }
