@@ -17,6 +17,10 @@ class Questao extends \BibliotecaConcurseiro\Models\AppModel
     protected $fillable = [
         'concurso_id',
         'disciplina_id',
+        'assunto_id',
+        'prova_id',
+        'tipo_questao',
+        'multipla_escolha',
         'cargo_id',
         'texto',
         'tipo'

@@ -16,6 +16,7 @@ class QuestaoFactory
     {
         $converted = [];
         if ($questao) {
+
             $converted = [
                 'id' => isset($questao->id) ? $questao->id : "",
                 'disciplina_id' => $questao->disciplina_id,
